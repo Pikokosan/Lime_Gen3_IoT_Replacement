@@ -9,6 +9,9 @@ void loop() {
   // Calculate the time difference in seconds
   unsigned long timeDifference = 2 * 60 * 60 - currentTime;  // 2 hours
 
+  //ble loop
+  ArduinoBleOTA.pull();
+  
   if (timeDifference <= 0) {
     // If more than 2 hours have passed, go to deep sleep
     digitalWrite(LOCK_PIN, LOW);

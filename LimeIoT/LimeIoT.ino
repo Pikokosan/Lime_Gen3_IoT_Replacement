@@ -1,17 +1,21 @@
 #include "CRC16.h"
 #include "CRC.h"
-#include <NimBLEDevice.h>
+//#include <NimBLEDevice.h>
+#include <ArduinoBleOTA.h>
+#include <BleOtaMultiservice.h>
+#include <BleOtaSecurityOnConnect.h>
 
 //need to make these changeable and saveable
 #define SCOOTER_NAME "lme-UJEYGJA"
 const uint32_t BLE_PASSWORD = 123456789;
 
+
 //version
-#define SOFTWARE_VERSION_MAJOR 0
-#define SOFTWARE_VERSION_MINOR 1
-#define SOFTWARE_VERSION_PATCH 0
-#define HARDWARE_VERSION_MAJOR 0
-#define HARDWARE_VERSION_MINOR 1
+#define HW_NAME "Lime iot"
+#define HW_VER{0,0,1} //version 0.0.1
+#define SW_NAME "Crusty starfish" //named for fun
+#define SW_VER{0,0,2} //version 0.0.2
+
 
 // Set pins
 #define RXD2 16
@@ -19,12 +23,12 @@ const uint32_t BLE_PASSWORD = 123456789;
 const int LOCK_PIN = 12;
 #define BUZZZER_PIN 13
 
+BleOtaSecurityOnConnect security;
+
 NimBLEServer *pServer = NULL;
 NimBLECharacteristic *pMainCharacteristic;
 NimBLECharacteristic *pSettingsCharacteristic;
 NimBLECharacteristic *pDebugCharacteristic;
-NimBLECharacteristic *pOtaCharacteristic;
-NimBLECharacteristic *pVersionCharacteristic;
 
 
 // Display Status Codes
@@ -77,9 +81,6 @@ RTC_DATA_ATTR int bootCount = 0;
 #define CHARACTERISTIC_UUID_MAIN "00c1acd4-f35b-4b5f-868d-36e5668d0929"
 #define CHARACTERISTIC_UUID_SETTINGS "7299b19e-7655-4c98-8cf1-69af4a65e982"
 #define CHARACTERISTIC_UUID_DEBUG "83ea7700-6ad7-4918-b1df-61031f95cf62"
-#define SERVICE_UUID_OTA                    "c8659210-af91-4ad3-a995-a58d6fd26145" // UART service UUID
-#define CHARACTERISTIC_UUID_FW              "c8659211-af91-4ad3-a995-a58d6fd26145"
-#define CHARACTERISTIC_UUID_HW_VERSION      "c8659212-af91-4ad3-a995-a58d6fd26145"
 
 
 
